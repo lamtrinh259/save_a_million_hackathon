@@ -53,3 +53,6 @@ typechain
 cache/
 artifacts/
 distribution/
+
+# Wireframe files
+wireframes/

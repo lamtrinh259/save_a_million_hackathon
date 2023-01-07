@@ -18,16 +18,53 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 
-const accounts = process.env.NEXT_PRIVATE_KEY !== undefined ? [process.env.NEXT_PRIVATE_KEY] : [];
+const MAINNET_RPC_URL =
+    process.env.MAINNET_RPC_URL ||
+    process.env.ALCHEMY_MAINNET_RPC_URL ||
+    "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
+const GOERLI_RPC_URL =
+    process.env.GOERLI_RPC_URL || "https://eth-goerli.alchemyapi.io/v2/your-api-key"
+const POLYGON_MAINNET_RPC_URL =
+    process.env.POLYGON_MAINNET_RPC_URL || "https://polygon-mainnet.alchemyapi.io/v2/your-api-key"
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "0x"
+// optional
+const MNEMONIC = process.env.MNEMONIC || "your mnemonic"
+
+// Your API key for Etherscan, obtain one at https://etherscan.io/
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
+const POLYGONSCAN_API_KEY = process.env.POLYGONSCAN_API_KEY || "Your polygonscan API key"
+const REPORT_GAS = process.env.REPORT_GAS || false
 
 module.exports = {
-	solidity: '0.8.4',
+  solidity: {
+    version: '0.8.4',
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
 	defaultNetwork: 'hardhat',
 	networks: {
 		hardhat: {},
 		safuux: {
 			url: ``,
-			accounts,
+			accounts: PRIVATE_KEY,
 		},
+    goerli:{
+      url: GOERLI_RPC_URL,
+      accounts: PRIVATE_KEY,
+    },
+    polygon:{
+      url: POLYGON_MAINNET_RPC_URL,
+      accounts: PRIVATE_KEY,
+    },
 	},
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts"
+  },
 };
